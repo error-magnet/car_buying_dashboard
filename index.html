@@ -1,0 +1,44 @@
+<head>
+	<script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="d3.min.js"></script>
+	<link rel="stylesheet" href="base.css">
+	<link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+	<link rel="import" href="bower_components/paper-card/paper-card.html">
+</head>
+<body>
+	<div id="filtersDiv">
+	</div>
+	<div id="preferencesDiv">
+		<h2> What priority would you give for the following features? </h2>
+		<div id="prefOptions">
+		</div>
+	</div>
+	<div id="carTilesDiv">
+		<div id="carTilesContainer"></div>
+	</div>
+	<paper-dialog>
+	  <h2></h2>
+	  <paper-dialog-scrollable>
+	  </paper-dialog-scrollable>
+	  <div class="buttons">
+	    <paper-button dialog-dismiss>Add to Shortlist</paper-button>
+	  </div>
+	</paper-dialog>
+
+
+	<div id="bubbleChartDiv">
+		<p> Each circle represents a car. 
+			Bigger circle indicates a better car for you </p>
+		<select id="bubbleDropdown"></select>
+	</div>
+	<div id="shortlistTableDiv">
+		<h2>Shortlisted Cars</h2>
+		<img src="table.bmp"></img>
+	</div>
+	
+	<script src="BubbleChart.js"></script>
+	<script src="base.js"></script>
+</body>

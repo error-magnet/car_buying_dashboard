@@ -1,0 +1,16 @@
+<script>
+	// disable native shadow root for consistency
+	Element.prototype.createShadowRoot = null;
+</script>
+
+<script src="../node_modules/webcomponents.js/webcomponents.js"></script>
+<link rel="import" href="../time-range-slider.html">
+
+<form method="GET" style="width: 60%; margin-left: auto; margin-right: auto">
+	<time-range-ruler min="8:15" max="19:00" border-color="darkblue"></time-range-ruler>
+	<time-range-slider min="8:15" max="19:00" color="lightblue" border-color="darkblue" border-radius="6px">
+		<input type="text" name="start" value="9:00">
+		<input type="text" name="end" value="18:00">
+	</time-range-slider>
+	<input type="submit">
+</form>

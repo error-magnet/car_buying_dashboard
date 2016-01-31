@@ -1,0 +1,97 @@
+#filtersDiv{
+	top: 0px;
+	position: absolute;
+	left: 0px;
+	width: 200px;
+	background-color: white;
+	height: 100%;
+}
+
+#filtersDiv .slider-container{
+	margin: 15px;
+}
+
+#preferencesDiv{
+	position: absolute;
+	top: 0px;
+	left: 200px;
+	height: 150px;
+	background-color: yellow;
+	width: 100%;
+}
+#preferencesDiv #prefOptions{
+	display: inline-flex;
+}
+
+#preferencesDiv #prefOptions select{
+	margin-left: 5px;
+	margin-right: 20px;
+}
+
+#carTilesDiv{
+	position: absolute;
+	top: 150px;
+	left: 200px;
+	height: 300px;
+	background-color: white;
+	width: 100%;
+	overflow-x: auto;
+}
+#carTilesContainer {
+	display: table;
+	border-spacing: 10px;
+}
+#carTilesContainer img{
+	margin: 5px;
+	height: 120px;
+	width: 160px;
+}
+#carTilesContainer .tile{
+	width:180px;
+	height: 220px;
+}
+#carTilesContainer paper-card{
+	display: table-cell;
+	cursor: pointer;
+}
+
+#carTilesContainer span{
+	display: block;
+	margin: 10px;
+}
+
+
+#bubbleChartDiv{
+	position: absolute;
+	top: 470px;
+	left: 200px;
+}
+#bubbleChartDiv svg {
+	position: absolute;
+	left: 0px;
+	margin-left: 10px;
+	margin-top:50px;
+}
+#bubbleChartDiv select{
+	display:inline;
+	float:left;
+}
+#bubbleChartDiv p{
+	display: inline;
+	margin-left: 100px;	
+}
+#bubbleChartDiv .bubble-circle{
+	cursor: pointer;
+}
+
+paper-dialog-scrollable{
+	display: table-cell;
+}
+#shortlistTableDiv{
+	position: absolute;
+	top: 450px;
+	left: 1250px;
+}
+
+
+
