@@ -33,6 +33,7 @@ If a **categorical** parameter is selected, the circles(cars) are colored and vi
 If a **continous** parameter is selected, the circles(cars) are arranged on a scale based on the parameter minimum and maximum value along the y-axis. This allows the user to see where the majority of the cars lie for this parameter, and select the best car available for this parameter visually.
 
 **TODO**: The positioning of the categorical parameters needs some tweaking, sometimes they are offscreen.
+
 **TODO**: There are some circles which get stuck in the middle of the wrong categories, or stuck in the center of the screen, not moving at all. Need to investigate why this happens.
 
 ### Shortlist table section (unimplemented)
