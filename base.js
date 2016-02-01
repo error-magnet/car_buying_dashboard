@@ -43,8 +43,6 @@ d3.csv('Automobile.csv', function(data){
 	};
 	
 
-	//TODO: search button?
-	//show a buy button
 	//build each section in the page
 	makePreferencesSection();
 	makeFilterSection(continousParams, categoricalParams, data);
@@ -103,7 +101,8 @@ var makePreferencesSection = function(){
 		
 		var pref = document.createElement('div');
 		var prefDropdown = document.createElement('select');
-		prefDropdown.innerHTML = "<option>Don't Care</option><option selected>Low</option>"+
+		prefDropdown.innerHTML = "<option>Don't Care</option>"+
+						"<option selected>Low</option>"+
 						"<option>High</option>";
 		
 		pref.textContent = d;
@@ -124,7 +123,6 @@ var makePreferencesSection = function(){
  * on preferences - bigger the circle, the car better matches users preferences
  * TODO: make categorical params position correctly - currently offcenter
  * TODO: fine tune parameters to avoid circles being stuck in the middle of wrong groups
- * TODO: make circle-score relationship non linear - highlight higher scores more
  * ===============================================================================*/
 var makeChartSection = function(continousParams, categoricalParams, data){
 	var dropdown = document.getElementById('bubbleDropdown');
@@ -147,8 +145,10 @@ var makeChartSection = function(continousParams, categoricalParams, data){
 		Array.prototype.slice.call(this.children).forEach(function(op){
 			if(op.selected){
 
-				var bubble = new BubbleChart(data, categoricalParams, continousParams,
+				var bubble = new BubbleChart(data, 
+					categoricalParams, continousParams,
 					showCarDataPopup);
+
 				bubble.makeChart(op.textContent);
 			}
 		});
@@ -167,7 +167,8 @@ var makeTileSection = function(data, continousParams){
 	tilesContainer.innerHTML = '';	
 		
 	for(i=0; i<data.length; i++){
-		
+	
+		//check which cars are not included because they are filtered out	
 		var shown = true;
 		if(continousParams){
 			for(var key in continousParams){
@@ -180,7 +181,7 @@ var makeTileSection = function(data, continousParams){
 
 		}
 		if(shown){
-		
+			//append only tiles of unfiltered cars	
 			tilesContainer.appendChild(makeTile(data[i]));
 		}
 		
@@ -193,7 +194,6 @@ var makeTileSection = function(data, continousParams){
  * Creates filters for each parameter, which can be used to by the user to not
  * see cars of range/categories not desired by the user
  * TODO: Checkbox filter for categorical params
- * TODO: hookup filter to actual data
  * =======================================================================*/
 
 var makeFilterSection = function(continousParams, categoricalParams, data){

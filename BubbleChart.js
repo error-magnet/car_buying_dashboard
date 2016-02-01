@@ -1,3 +1,4 @@
+
 var BubbleChart = function(data, categoricalParams, continousParams, circleClickCallback){
 	
 	//data needed for the plot
@@ -46,12 +47,14 @@ BubbleChart.prototype.makeCircles = function(){
 			}).classed('bubble-circle', true);
 };
 
+//create legend and gradient for continous parameters
 BubbleChart.prototype.makeContinousLabels = function(){
 
 	var _this = this;
 
 	var paramRange = this.continousParams[this.groupParam]
 
+	//color scale used to color the circles based on param values
 	var color = d3.scale.linear()
 			.domain(paramRange)
     			.range(['orange', 'blue'])
@@ -60,6 +63,7 @@ BubbleChart.prototype.makeContinousLabels = function(){
 	var scale = d3.scale.linear().domain(paramRange)
 			.range([50, _this.svgHeight-50]);	
 	
+	//gradient used to color the legend
 	var gradient = this.plotGroup.append('defs')
 			.append('linearGradient')
 			.attr('id', 'contGrad')
@@ -78,7 +82,7 @@ BubbleChart.prototype.makeContinousLabels = function(){
     		.attr('stop-color', 'blue')
     		.attr('stop-opacity', 1);
 
-
+	//create gradient
 	var rect = this.plotGroup.append('rect')
 			.attr('x', 10)
 			.attr('y', scale.range()[0])
@@ -94,8 +98,10 @@ BubbleChart.prototype.makeContinousLabels = function(){
 			.text(paramRange[1])
 			.attr('x', 35)
 			.attr('y', scale(paramRange[1]));
- 
-
+ 	
+	//create "target" - which is the position a circle is supposed to be
+	//based on the groupParameter value
+	//the force needs to pull it towards this point
 	this.nodes.forEach(function(d){
 		d.target = scale(parseFloat(d.data[_this.groupParam]));
 		d.x = _this.svgWidth*Math.random();
@@ -193,7 +199,7 @@ BubbleChart.prototype.forceCategorical = function(){
 		_this.bubbles
 			.attr("transform", function(d) { 
 				return "translate(" + d.x + "," + d.y + ")"; 
-			})	
+		 	})	
 				
 	});
 			
@@ -256,8 +262,8 @@ BubbleChart.prototype.makeCategoricalLabels = function(){
 
 	this.fixedNodes = d3.range(_this.categories.length).map(function(d, i){ 
 		return {
-			x: _this.svgHeight*i*Math.pow(-1, i)/8, 
-	    		y: _this.svgHeight*(i%2+1)*Math.pow(-1, i)/8, 
+			x: _this.svgWidth*(i/2)/(_this.categories.length/2) - _this.svgWidth/2.5, 
+	    		y: _this.svgHeight*(i%2)/3 - _this.svgHeight/4, 
 			fixed: true, category: _this.categories[i]};
 	}); 
 
@@ -279,20 +285,23 @@ BubbleChart.prototype.makeCategoricalLabels = function(){
 };
 
 
-
+//event handler adds the hover and click events on the circle
 BubbleChart.prototype.eventHandler = function(){
 	
 	var _this = this;	
+
+	//when the mouse hovers over the circle, add a border
 	this.bubbles.on('mouseover', function(d){
 		d3.select(this).style('stroke', ' black')
 			.style('stroke-width', '2px');
 	});
 
-	
+	//remove the hover border when the mouse moves out
 	this.bubbles.on('mouseout', function(d){
 		d3.select(this).style('stroke', 'none');
 	});
 	
+	//on clicking a circle, show the car details popup
 	this.bubbles.on('click', function(d){
 		
 		_this.circleClickCallback(d.data);
@@ -302,15 +311,21 @@ BubbleChart.prototype.eventHandler = function(){
 
 };
 
-
+//This is the master function, which needs to be called to create the plot
+//this uses all the other functions on this BubbleChart prototype to create the chart
+//TODO: create an update function rather than redrawing the plot every time
 BubbleChart.prototype.makeChart = function(param){
 	var _this = this;
+	
+	// clean the plot and start afresh
 	d3.selectAll('svg').remove();
 	this.force = null;
+
 	//TODO: give actual score values
 	this.score = d3.range(206).map(function(){return Math.random();});
 	
-	//default group by bodystyle
+	//this is the parameter selected in the dropdown
+	//and hence is the parameter to be grouped by
 	this.groupParam = param;
 
 
@@ -318,7 +333,10 @@ BubbleChart.prototype.makeChart = function(param){
 
 	//create nodes for each data point, let everything start from center of SVG
 	this.data.forEach(function(d, i){
-
+		
+		//check for filters and empty values
+		//if the these conditions are not satisfied, these datapoints
+		//should not be displayed
 		var shown = true;
 		for(var key in _this.continousParams){
 			if(d[key] === '' || (_this.continousParams[key] 
@@ -331,11 +349,14 @@ BubbleChart.prototype.makeChart = function(param){
 
 		}
 
-
+		//create a "nodes" object which is used to create circles
+		//only add them if they need to be shown
+		//also initialize the starting position of these circles
+		//and the circle radius based on score
 		if(d[_this.groupParam] !== null && d[_this.groupParam] !== '' && shown){
 			_this.nodes.push({
-				x:_this.svgWidth/2, //*Math.random(), 
-				y:_this.svgHeight/2, //*Math.random(),
+				x:_this.svgWidth/2,  
+				y:_this.svgHeight/2, 
 				data: d, radius: (Math.pow(_this.score[i]*100, 2)
 							*_this.maxCircleRadius)/10000
 			});
@@ -343,9 +364,11 @@ BubbleChart.prototype.makeChart = function(param){
 		}
 	});
 
-	//move cateogories inside the if	
+	//create circles
 	this.makeCircles();
 
+	//create labels and use forces to pull the circles from their initial positions
+	//to their destined positions - based on parameter vales
 	if(Object.keys(this.categoricalParams).indexOf(this.groupParam) !== -1){
 
 		this.categories = this.categoricalParams[this.groupParam]; 
@@ -356,8 +379,11 @@ BubbleChart.prototype.makeChart = function(param){
 		this.makeContinousLabels();
 		this.forceContinous();
 	}
+
+	//add events
 	this.eventHandler();
 };
+
 
 
 
